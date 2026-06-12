@@ -68,7 +68,7 @@ jobs:
           git fetch origin "$BASE"
 
           # Capture output; codex review exits 0 on pass, non-zero on findings
-          OUTPUT=$(codex review --base "origin/$BASE" -c 'model_reasoning_effort="high"' 2>&1) || true
+          OUTPUT=$(codex review --base "origin/$BASE" -c 'model_reasoning_effort="high"' --dangerously-bypass-approvals-and-sandbox 2>&1) || true
           EXIT_CODE=$?
 
           # Determine gate
