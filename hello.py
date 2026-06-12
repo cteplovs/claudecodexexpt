@@ -8,4 +8,4 @@ def add(a, b):
 
 if __name__ == "__main__":
     print(greet())
-    print(add(2, 3))
+    print(add(2, 4))
