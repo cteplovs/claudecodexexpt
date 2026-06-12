@@ -63,12 +63,14 @@ jobs:
           # Codex reads credentials from ~/.codex/auth.json, not the env var directly
           mkdir -p ~/.codex
           printf '{"auth_mode":"apikey","OPENAI_API_KEY":"%s"}' "$OPENAI_API_KEY" > ~/.codex/auth.json
+          # Disable bubblewrap sandbox — not available on GitHub Actions runners
+          printf '[sandbox]\ntype = "none"\n' >> ~/.codex/config.toml
 
           BASE=${{ steps.pr-info.outputs.base_ref }}
           git fetch origin "$BASE"
 
           # Capture output; codex review exits 0 on pass, non-zero on findings
-          OUTPUT=$(codex review --base "origin/$BASE" -c 'model_reasoning_effort="high"' --dangerously-bypass-approvals-and-sandbox 2>&1) || true
+          OUTPUT=$(codex review --base "origin/$BASE" -c 'model_reasoning_effort="high"' 2>&1) || true
           EXIT_CODE=$?
 
           # Determine gate
