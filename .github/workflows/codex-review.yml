@@ -60,6 +60,10 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
+          # Codex reads credentials from ~/.codex/auth.json, not the env var directly
+          mkdir -p ~/.codex
+          printf '{"auth_mode":"apikey","OPENAI_API_KEY":"%s"}' "$OPENAI_API_KEY" > ~/.codex/auth.json
+
           BASE=${{ steps.pr-info.outputs.base_ref }}
           git fetch origin "$BASE"
 
